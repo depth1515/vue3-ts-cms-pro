@@ -65,3 +65,19 @@ yarn add prettier -D
 ```
 yarn prettier
 ```
+
+#### git husky 和 eslint
+
+```
+npx husky-init && npm install
+```
+
+#### commitizen
+
+```
+yarn add commitizen -D
+```
+初始化 cz-conventional-changelog
+```
+npx commitizen init cz-conventional-changelog --save-dev --save-exact
+```
