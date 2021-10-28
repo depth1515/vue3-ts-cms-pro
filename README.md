@@ -67,7 +67,7 @@ yarn prettier
 ```
 
 #### git husky 和 eslint
-
+拦截 pre-commit hook
 ```
 npx husky-init && npm install
 ```
@@ -80,4 +80,26 @@ yarn add commitizen -D
 初始化 cz-conventional-changelog
 ```
 npx commitizen init cz-conventional-changelog --save-dev --save-exact
+```
+
+```
+npx cz
+```
+
+#### commitlint
+
+拦截commit-msg ,验证 commit message
+```
+npm install --save-dev @commitlint/config-conventional @commitlint/cli
+yarn add @commitlint/config-conventional @commitlint/cli -D
+```
+commitlint.config.js
+```js
+module.exports = {
+  extends: ['@commitlint/config-conventionnal']
+}
+```
+使用husky生成commit-msg文件
+```
+npx husky add .husky/commit-msg "npx --no-install commitlint --edit $1"
 ```
