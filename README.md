@@ -112,3 +112,26 @@ module.exports = {
 ```
 npx husky add .husky/commit-msg "npx --no-install commitlint --edit $1"
 ```
+
+### 项目搭建
+
+#### vueRouter
+
+```
+yarn add vue-router@4
+```
+
+#### vuex
+
+```
+yarn add vuex@next
+```
+
+#### element-plus
+
+```
+yarn add element-plus
+```
+
+#### axios
+
