@@ -135,3 +135,6 @@ yarn add element-plus
 
 #### axios
 
+### 环境变量
+
+#### 方式一： 手动修改变量
