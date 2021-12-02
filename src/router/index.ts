@@ -1,19 +1,41 @@
 import * as VueRouter from 'vue-router'
+import { RouteRecordRaw } from 'vue-router'
+import cache from '@/utils/cache'
+import { firstMenu } from '@/utils/asyncRouter'
 
-const Home = () => import('@/views/Home.vue')
+// const Home = () => import('@/views/Home.vue')
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/main'
   },
   {
-    path: '/home',
-    component: Home
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login/login.vue')
+  },
+  {
+    path: '/main',
+    name: 'main',
+    component: () => import('@/views/main/main.vue')
   }
 ]
 
 export const router = VueRouter.createRouter({
-  history: VueRouter.createWebHashHistory(),
-  routes
+  routes,
+  history: VueRouter.createWebHashHistory()
+})
+
+router.beforeEach((to) => {
+  if (to.path !== '/login') {
+    const token = cache.getCache('token')
+    if (!token) {
+      return '/login'
+    }
+  }
+
+  if (to.path === '/main') {
+    return firstMenu.url
+  }
 })

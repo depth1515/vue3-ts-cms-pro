@@ -1,19 +1,18 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { ElLoading } from 'element-plus'
-import 'element-plus/theme-chalk/el-loading.css'
-import { ILoadingInstance } from 'element-plus/lib/components'
 import { request } from '@/service/index'
+import { ILoadingInstance } from 'element-plus/lib/el-loading/src/loading.type'
+import { ElLoading } from 'element-plus'
 // types.ts
-interface zRequestInterceptors {
+interface zRequestInterceptors<T = AxiosResponse> {
   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
   requestInterceptorCatch?: (error: any) => any
-  responseInterceptor?: (res: any) => any
+  responseInterceptor?: (res: T) => T
   responseInterceptorCatch?: (error: any) => any
 }
 
-interface zRequestConfig extends AxiosRequestConfig {
-  interceptors?: zRequestInterceptors
+interface zRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+  interceptors?: zRequestInterceptors<T>
   showLoading?: boolean
 }
 
@@ -34,6 +33,7 @@ class zRequest {
     this.interceptors = config.interceptors
 
     // 使用拦截器
+
     //* 从 config 中取出的拦截器是对应实例的拦截器
     this.instance.interceptors.request.use(
       this.interceptors?.requestInterceptor,
@@ -67,14 +67,13 @@ class zRequest {
 
     this.instance.interceptors.response.use(
       (res) => {
+        console.log(res)
         console.log('全局response res', res.data)
         // const data = res.data
         // if (data.returnCode === '1001') {
         //   console.log('cuowu')
         // } else return res.data
-        setTimeout(() => {
-          this.loading?.close()
-        }, 1000)
+        this.loading?.close()
         return res.data
       },
       (err) => {
@@ -88,7 +87,7 @@ class zRequest {
     )
   }
 
-  request<T>(config: zRequestConfig): Promise<T> {
+  request<T>(config: zRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       if (config.interceptors?.requestInterceptor) {
         config = config.interceptors.requestInterceptor(config)
@@ -116,19 +115,19 @@ class zRequest {
     })
   }
 
-  get<T>(config: zRequestConfig): Promise<T> {
+  get<T>(config: zRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: zRequestConfig): Promise<T> {
+  post<T>(config: zRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: zRequestConfig): Promise<T> {
+  delete<T>(config: zRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: zRequestConfig): Promise<T> {
+  patch<T>(config: zRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

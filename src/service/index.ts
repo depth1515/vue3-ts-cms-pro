@@ -1,12 +1,13 @@
 import zRequest from '@/service/request'
 import { BASE_URL, TIME_OUT } from '@/service/config'
+import cache from '@/utils/cache'
 
 export const request = new zRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
   interceptors: {
     requestInterceptor: (config) => {
-      const token = ''
+      const token = cache.getCache('token')
       if (token) {
         config.headers!.Authorization = `Bearer ${token}`
       }
@@ -14,15 +15,12 @@ export const request = new zRequest({
       return config
     },
     requestInterceptorCatch: (err) => {
-      console.log('err', err)
       return err
     },
-    responseInterceptor: (response) => {
-      console.log('config', response.data)
-      return response
+    responseInterceptor: (res) => {
+      return res
     },
     responseInterceptorCatch: (err) => {
-      console.log('err', err)
       return err
     }
   }
